@@ -1,6 +1,7 @@
 import './App.css';
 import React from 'react';
 import Location from './components/Location.js';
+import axios from 'axios';
 
 function App() {
   
@@ -12,15 +13,20 @@ function App() {
     });
   }
 
-  function getWeather() {
+  async function getWeather() {
     if (location["Latitude"] === "N/A" || location["Longitude"] === "N/A") {
       alert("Please Set Location");
       return;
     }
 
-    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${location["Latitude"]}&lon=${location["Longitude"]}&appid=${process.env.REACT_APP_WEATHER_API_KEY}`)
-    .then(res => res.json())
-    .then(data => setLocation((prevState) => ({...prevState, "Weather": data["weather"][0]["main"]})))
+    try {
+      const res = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${location["Latitude"]}&lon=${location["Longitude"]}&appid=${process.env.REACT_APP_WEATHER_API_KEY}`);
+      const data = res.data;
+      setLocation((prevState) => ({...prevState, "Weather": data["weather"][0]["main"]}));
+    } catch(err) {
+      console.log(err);
+    }
+
   }
 
   return (

@@ -1,9 +1,10 @@
 import React from 'react';
+import axios from 'axios';
 
 export default function Location({lat, lon, setLocation}) {
     const [text, setText] = React.useState("");
     
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
 
         if (!text){
@@ -11,9 +12,14 @@ export default function Location({lat, lon, setLocation}) {
             return;
         }
 
-        fetch(`https://api.geoapify.com/v1/geocode/search?text=${text}&format=json&apiKey=${process.env.REACT_APP_GEOCODING_KEY}`)
-        .then(res => res.json())
-        .then(data => setLocation(prevState => ({...prevState, "Latitude": data.results[0].lat, "Longitude": data.results[0].lon})));
+        try {
+            const res = await axios.get(`https://api.geoapify.com/v1/geocode/search?text=${text}&format=json&apiKey=${process.env.REACT_APP_GEOCODING_KEY}`);
+            const data = res.data;
+            setLocation(prevState => ({...prevState, "Latitude": data.results[0].lat, "Longitude": data.results[0].lon}));
+        } catch(err) {
+            console.log(err);
+        }
+
     }
 
     return(
