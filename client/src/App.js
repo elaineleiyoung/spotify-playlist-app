@@ -1,5 +1,6 @@
 import './App.css';
 import React from 'react';
+import Location from './components/Location.js';
 
 function App() {
   
@@ -24,12 +25,9 @@ function App() {
 
   return (
     <div className="App">
-      <div className="Location">
-        <div className="Latitude">Latitude: {location["Latitude"]}</div>
-        <div className="Longitude">Longitude: {location["Longitude"]}</div>
-      </div>
+      <Location lat={location["Latitude"]} lon={location["Longitude"]} setLocation={setLocation}/>
       <div className="Weather">Weather: {location["Weather"]}</div>
-      <button className="Button setLocation" onClick={getLocation}>Set Location</button>
+      <button className="Button setLocation" onClick={getLocation}>Use Current Location</button>
       <button className="Button getWeather" onClick={getWeather}>Get Weather</button>
     </div>
   );
